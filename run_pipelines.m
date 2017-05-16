@@ -1,21 +1,25 @@
 clear all;
 % All the parameters besides the internal diameter are defined inside the
 % pipe model
-D1   = 0.39;
-D2   = 0.58;    % External diameter (m)
+D1   = 0.0857;
+D2   = 0.16;    % External diameter (m)
+A1   = pi*D1^2/4;
 
-Vdot = 0.25;    % Volumetric flow rate (m^3/s)
-length = 30;  % Length (m)
-kInsulant = 0.0350;
-rho0 = 840;
+mdot = 5.36;    % Volumetric flow rate (m^3/s)
+length = 125;  % Length (m)
+kInsulant = 0.023;
+%rho0 = 840;
 
 % production plant
-TUpstream = 333; % Plant Supply temperature (K)
+TUpstream = 65 + 273.15; % Plant Supply temperature (K)
+TDownstream = 60 + 273.15;
+Tinitial = 60 + 273.15;
 
 
-kSoil = 1.56;
-TSoil = 300;    % Soil temperature (K)
-z = 1.1;        % Soil thickness (m)
+% Soil properties
+kSoil = 1.6;   % (W/mK)
+TSoil = 283;    % Soil temperature (K)
+z = 1;        % Soil thickness (m)
 
 % Buildings
 

@@ -1,11 +1,12 @@
 clear all;
 % All the parameters besides the internal diameter are defined inside the
-T_initial = 350; %K
+T_initial = 60 + 273.15; %K
 
 
 % production plant
-TUpstream = 65 + 273.15; % Plant Supply temperature (K)
-TDownstream = 65 + 273.15; 
+TUpstream = 338.25325; % Plant Supply temperature (K)
+TDownstream = 60 + 273.15; 
+PUpstream = 1.01325*6; % bar
 
 % Soil properties
 kSoil = 1.6;   % (W/mK)
@@ -99,6 +100,25 @@ Ti(8) = simlog.E7.pipe_model.A.T.series.values; % K
 To(8) = simlog.E7.pipe_model.B.T.series.values; % K
 mdot_pipe(8) = simlog.E7.pipe_model.mdot_A.series.values;
 
+dP(1) = Pi(1)-Po(1);
+dP(2) = Pi(2)-Po(2);
+dP(3) = Pi(3)-Po(3);
+dP(4) = Pi(4)-Po(4);
+dP(5) = Pi(5)-Po(5);
+dP(6) = Pi(6)-Po(6);
+dP(7) = Pi(7)-Po(7);
+dP(8) = Pi(8)-Po(8);
+
+dT(1) = Ti(1)-To(1);
+dT(2) = Ti(2)-To(2);
+dT(3) = Ti(3)-To(3);
+dT(4) = Ti(4)-To(4);
+dT(5) = Ti(5)-To(5);
+dT(6) = Ti(6)-To(6);
+dT(7) = Ti(7)-To(7);
+dT(8) = Ti(8)-To(8);
+
+
 
 % E = {'E0', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7'};
 % Pi = zeros(1,size(edge,1));
@@ -113,8 +133,8 @@ mdot_pipe(8) = simlog.E7.pipe_model.mdot_A.series.values;
 %     To(i) = simlog.E(i).pipe_model.B.T.series.values; % K
 % end
 
-T = table(transpose(Di), transpose(Do), transpose(mdot_pipe), transpose(Pi),transpose(Po),transpose(Ti),transpose(To),...
-'VariableNames', {'Di' 'Do' 'mdot_pipe' 'Pi' 'Po' 'Ti' 'To'});
+T = table(transpose(Di), transpose(Do), transpose(mdot_pipe), transpose(Pi), transpose(Po), transpose(dP), transpose(Ti),transpose(To), transpose(dT),...
+'VariableNames', {'Di' 'Do' 'mdot_pipe' 'Pi' 'Po' 'dP' 'Ti' 'To' 'dT'});
 writetable(T, 'C:\Users\fcl2\Documents\MATLAB\network\network1_results.csv')
 
 
