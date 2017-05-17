@@ -17,8 +17,8 @@ z = 1;        % Soil thickness (m)
 length = 125;  % Length (m)
 pipe_roughness = 2e-5; % steel pipe roughness (m)
 
-edge = xlsread('network2_edge_input.xlsx');
-node = xlsread('network2_node_input.xlsx');
+edge = xlsread('network2_input.xlsx','edge');
+node = xlsread('network2_input.xlsx','node');
 
 Di = zeros(1,size(edge,1)); % inner diameter
 Do = zeros(1,size(edge,1)); % outer diameter
