@@ -16,12 +16,18 @@ z = 1;        % Soil thickness (m)
 % pipe model
 length = 125;  % Length (m)
 pipe_roughness = 2e-5; % steel pipe roughness (m)
+kInsulant = 0.023; % (W/mK)
+%rho0 = 998;  %water density
+
+plant_node = 1;
 
 edge = xlsread('network3_input.xlsx','edge');
 node = xlsread('network3_input.xlsx','node');
 node_mass_flow = xlsread('Node_MassFlow_DH.csv');
+node_mass_flow(:,1)=[]; % delete the first column
+node_mass_flow(:,plant_node) = 0; % set mass flow at plants to zero
 
-    
+% intializing parameters
 Di = zeros(1,size(edge,1)); % inner diameter
 Do = zeros(1,size(edge,1)); % outer diameter
 Ac = zeros(1,size(edge,1)); % cross section area, inner diameter
@@ -29,6 +35,7 @@ Ai = zeros(1,size(edge,1)); % pipe surface area, inner diameter
 Ao = zeros(1,size(edge,1)); % pipe surface area, outer diameter
 Thi = zeros(1,size(edge,1)); % thickness of insulation
 Tho = zeros(1,size(edge,1)); % thickness of soil
+% read parameters
 for j = 1:size(edge,1)
     Di(j) = edge(j,1);
     Do(j) = edge(j,2);
@@ -38,14 +45,12 @@ for j = 1:size(edge,1)
     Thi(j) = Di(j) / 2 * log(Do(j) / Di(j));
     Tho(j) = Do(j)/2*log(2*z/Do(j) + sqrt((2*z/Do(j))^2 - 1));
 end
-for t = 1:8760
-    mdot = zeros(1,size(node,1)); 
-    for j = 1:size(node,1)
-        mdot(j) = node(j,1); % mass flow rate {kg/s)
+for t = 80
+    % read node mass flow at each time-step
+    mdot = zeros(1,size(node_mass_flow,2));  
+    for j = 1:size(mdot,2)
+        mdot(j) = node_mass_flow(t,j); % mass flow rate {kg/s)
     end
-
-    kInsulant = 0.023; % (W/mK)
-    %rho0 = 998;  %water density
 
     % Initialization
     load_system('pipelines_network3');
