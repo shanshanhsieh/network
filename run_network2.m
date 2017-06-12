@@ -133,7 +133,7 @@ dT(8) = Ti(8)-To(8);
 
 T = table(transpose(Di), transpose(Do), transpose(mdot_pipe), transpose(Pi), transpose(Po), transpose(dP), transpose(Ti),transpose(To), transpose(dT),...
 'VariableNames', {'Di' 'Do' 'mdot_pipe' 'Pi' 'Po' 'dP' 'Ti' 'To' 'dT'});
-writetable(T, 'C:\Users\fcl2\Documents\MATLAB\network\network2_results.csv')
+writetable(T, 'network2_results.csv')
 
 
 

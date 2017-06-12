@@ -20,13 +20,13 @@ pipe_roughness = 2e-5; % steel pipe roughness (m)
 edge = xlsread('network1_input.xlsx','edge');
 node = xlsread('network1_input.xlsx','node');
 
-Di = zeros(1,size(edge,1)); % inner diameter
-Do = zeros(1,size(edge,1)); % outer diameter
-Ac = zeros(1,size(edge,1)); % cross section area, inner diameter
-Ai = zeros(1,size(edge,1)); % pipe surface area, inner diameter
-Ao = zeros(1,size(edge,1)); % pipe surface area, outer diameter
-Thi = zeros(1,size(edge,1)); % thickness of insulation
-Tho = zeros(1,size(edge,1)); % thickness of soil
+% Di = zeros(1,size(edge,1)); % inner diameter
+% Do = zeros(1,size(edge,1)); % outer diameter
+% Ac = zeros(1,size(edge,1)); % cross section area, inner diameter
+% Ai = zeros(1,size(edge,1)); % pipe surface area, inner diameter
+% Ao = zeros(1,size(edge,1)); % pipe surface area, outer diameter
+% Thi = zeros(1,size(edge,1)); % thickness of insulation
+% Tho = zeros(1,size(edge,1)); % thickness of soil
 for j = 1:size(edge,1)
     Di(j) = edge(j,1);
     Do(j) = edge(j,2);
@@ -135,7 +135,7 @@ dT(8) = Ti(8)-To(8);
 
 T = table(transpose(Di), transpose(Do), transpose(mdot_pipe), transpose(Pi), transpose(Po), transpose(dP), transpose(Ti),transpose(To), transpose(dT),...
 'VariableNames', {'Di' 'Do' 'mdot_pipe' 'Pi' 'Po' 'dP' 'Ti' 'To' 'dT'});
-writetable(T, 'C:\Users\fcl2\Documents\MATLAB\network\network1_results.csv')
+writetable(T, 'network1_results.csv')
 
 
 
