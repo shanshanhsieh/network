@@ -23,11 +23,11 @@ plant_node = [1,7];
 
 edge = xlsread('network2_input.xlsx','edge');
 node = xlsread('network2_input.xlsx','node');
-node_mass_flow = xlsread('Node_MassFlow_DH.csv');
+node_mass_flow = xlsread('network2_input.xlsx','Node_MassFlow_DH');
 node_mass_flow(:,1)=[]; % delete the first column
 node_mass_flow(:,plant_node) = 0; % set mass flow at plants to zero
 
-[num,text,T_supply] = xlsread('DH_T_Supply.csv');
+[num,text,T_supply] = xlsread('network2_input.xlsx','DH_T_Supply');
 T_Upstream_array = T_supply(2:end,plant_node(1));
 
 
@@ -52,7 +52,7 @@ end
 
 T_node_supply = zeros(8760,size(node_mass_flow,2));
 dP_supply = zeros(8760,1);
-for t=1:8760
+for t=10:12
     TUpstream = T_Upstream_array{t};
     TDownstream = 60 + 273.15; 
     if isnumeric(TUpstream)
@@ -166,8 +166,9 @@ for t=1:8760
         dP_supply(t) = 0;
     end
 end
-writetable(T, 'network2_results.csv')
-
+%writetable(T, 'network2_results.csv')
+csvwrite('network2_T_node_supply.csv', T_node_supply)
+csvwrite('network2_dP_supply.csv', dP_supply)
 
 
 

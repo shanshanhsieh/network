@@ -4,9 +4,9 @@ T_initial = 350; %K
 
 
 % production plant
-% TUpstream = 338.3564; % Plant Supply temperature (K)
-% TDownstream = 60 + 273.15; 
-PUpstream = 1.01325*4; % bar
+TUpstream = 338.25735; % Plant Supply temperature (K)
+TDownstream = 60 + 273.15; 
+PUpstream = 1.01325*5; % bar
 
 % Soil properties
 kSoil = 1.6;   % (W/mK)
@@ -27,9 +27,6 @@ node_mass_flow = xlsread('Node_MassFlow_DH.csv');
 node_mass_flow(:,1)=[]; % delete the first column
 node_mass_flow(:,plant_node) = 0; % set mass flow at plants to zero
 
-[num,text,T_supply] = xlsread('DH_T_Supply.csv');
-T_Upstream_array = T_supply(2:end,plant_node(1));
-
 % intializing parameters
 Di = zeros(1,size(edge,1)); % inner diameter
 Do = zeros(1,size(edge,1)); % outer diameter
@@ -48,10 +45,6 @@ for j = 1:size(edge,1)
     Thi(j) = Di(j) / 2 * log(Do(j) / Di(j));
     Tho(j) = Do(j)/2*log(2*z/Do(j) + sqrt((2*z/Do(j))^2 - 1));
 end
-
-
-T_node_supply = zeros(8760,size(node_mass_flow,2));
-dP_supply = zeros(8760,1);
 for t = 80
     TUpstream = T_Upstream_array{t};
     TDownstream = 60 + 273.15; 
@@ -132,16 +125,6 @@ for t = 80
         dT(6) = Ti(6)-To(6);
         dT(7) = Ti(7)-To(7);
         dT(8) = Ti(8)-To(8);
-        
-        T_node(1) = simlog.N0.A.T.series.values; % K
-        T_node(2) = simlog.N1.A.T.series.values; % K
-        T_node(3) = simlog.N2.A.T.series.values; % K
-        T_node(4) = simlog.N3.A.T.series.values; % K
-        T_node(5) = simlog.N4.A.T.series.values; % K
-        T_node(6) = simlog.N5.A.T.series.values; % K
-        T_node(7) = simlog.N6.A.T.series.values; % K
-        T_node(8) = simlog.N7.A.T.series.values; % K
-        T_node(9) = simlog.N8.A.T.series.values; % K
 
         % E = {'E0', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7'};
         % Pi = zeros(1,size(edge,1));
@@ -158,17 +141,8 @@ for t = 80
 
         T = table(transpose(Di), transpose(Do), transpose(mdot_pipe), transpose(Pi), transpose(Po), transpose(dP), transpose(Ti),transpose(To), transpose(dT),...
         'VariableNames', {'Di' 'Do' 'mdot_pipe' 'Pi' 'Po' 'dP' 'Ti' 'To' 'dT'});
-
-        T_node_supply(t,:) = vec2mat(T_node,size(T_node_supply,2));
-        dP_supply(t) = sum(dP);
-    else
-        T_node_supply(t,:) = str2double(T_supply(t+1,:));
-        dP_supply(t) = 0;
-    end
 end
-%writetable(T, 'network3_results.csv')
-csvwrite('network3_T_node_supply.csv', T_node_supply)
-csvwrite('network3_dP_supply.csv', dP_supply)
+writetable(T, 'network3_results.csv')
 
 
 
