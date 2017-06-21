@@ -4,9 +4,10 @@ T_initial = 350; %K
 
 
 % production plant
-% TUpstream = 338.3564; % Plant Supply temperature (K)
-% TDownstream = 60 + 273.15; 
+plant_node = [1,7];
 PUpstream = 1.01325*4; % bar
+[num,text,T_supply] = xlsread('network2_input.xlsx','T_Supply_DH');
+T_Upstream_array = T_supply(2:end,plant_node(1));
 
 % Soil properties
 kSoil = 1.6;   % (W/mK)
@@ -19,16 +20,13 @@ pipe_roughness = 2e-5; % steel pipe roughness (m)
 kInsulant = 0.023; % (W/mK)
 %rho0 = 998;  %water density
 
-plant_node = [1,7];
 
-edge = xlsread('network2_input.xlsx','edge');
-node = xlsread('network2_input.xlsx','node');
+% Read pipe properties and substation flow rates
+edge = xlsread('network2_input.xlsx','Edge_DH');
+% node = xlsread('network2_input.xlsx','node');
 node_mass_flow = xlsread('network2_input.xlsx','Node_MassFlow_DH');
 node_mass_flow(:,1)=[]; % delete the first column
 node_mass_flow(:,plant_node) = 0; % set mass flow at plants to zero
-
-[num,text,T_supply] = xlsread('network2_input.xlsx','DH_T_Supply');
-T_Upstream_array = T_supply(2:end,plant_node(1));
 
 
 
@@ -52,13 +50,13 @@ end
 
 T_node_supply = zeros(8760,size(node_mass_flow,2));
 dP_supply = zeros(8760,1);
-for t=10:12
+for t=1:8760
     TUpstream = T_Upstream_array{t};
     TDownstream = 60 + 273.15; 
     if isnumeric(TUpstream)
-        mdot = zeros(1,size(node,1)); 
-        for j = 1:size(node,1)
-            mdot(j) = node(j,1); % mass flow rate {kg/s)
+        mdot = zeros(1,size(node_mass_flow,2));  
+        for j = 1:size(node_mass_flow,2)
+            mdot(j) = node_mass_flow(t,j); % mass flow rate {kg/s)
         end
 
         % Initialization
@@ -67,50 +65,50 @@ for t=10:12
         % simlog.print  
 
         % Retrieve values from the Simscape data logging
-        Pi(1) = simlog.E0.pipe_model.A.p.series.values* 1e5; % Pa
-        Po(1) = simlog.E0.pipe_model.B.p.series.values* 1e5; % Pa
+        Pi(1) = simlog.E0.pipe_model.A.p.series.values* 1e6; % Pa
+        Po(1) = simlog.E0.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(1) = simlog.E0.pipe_model.A.T.series.values; % K
         To(1) = simlog.E0.pipe_model.B.T.series.values; % K
         mdot_pipe(1) = simlog.E0.pipe_model.mdot_A.series.values;
 
-        Pi(2) = simlog.E1.pipe_model.A.p.series.values* 1e5; % Pa
-        Po(2) = simlog.E1.pipe_model.B.p.series.values* 1e5; % Pa
+        Pi(2) = simlog.E1.pipe_model.A.p.series.values* 1e6; % Pa
+        Po(2) = simlog.E1.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(2) = simlog.E1.pipe_model.A.T.series.values; % K
         To(2) = simlog.E1.pipe_model.B.T.series.values; % K
         mdot_pipe(2) = simlog.E1.pipe_model.mdot_A.series.values;
 
-        Pi(3) = simlog.E2.pipe_model.A.p.series.values* 1e5; % Pa
-        Po(3) = simlog.E2.pipe_model.B.p.series.values* 1e5; % Pa
+        Pi(3) = simlog.E2.pipe_model.A.p.series.values* 1e6; % Pa
+        Po(3) = simlog.E2.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(3) = simlog.E2.pipe_model.A.T.series.values; % K
         To(3) = simlog.E2.pipe_model.B.T.series.values; % K
         mdot_pipe(3) = simlog.E2.pipe_model.mdot_A.series.values;
 
-        Pi(4) = simlog.E3.pipe_model.A.p.series.values* 1e5; % Pa
-        Po(4) = simlog.E3.pipe_model.B.p.series.values* 1e5; % Pa
+        Pi(4) = simlog.E3.pipe_model.A.p.series.values* 1e6; % Pa
+        Po(4) = simlog.E3.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(4) = simlog.E3.pipe_model.A.T.series.values; % K
         To(4) = simlog.E3.pipe_model.B.T.series.values; % K
         mdot_pipe(4) = simlog.E3.pipe_model.mdot_A.series.values;
 
-        Pi(5) = simlog.E4.pipe_model.A.p.series.values* 1e5; % Pa
-        Po(5) = simlog.E4.pipe_model.B.p.series.values* 1e5; % Pa
+        Pi(5) = simlog.E4.pipe_model.A.p.series.values* 1e6; % Pa
+        Po(5) = simlog.E4.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(5) = simlog.E4.pipe_model.A.T.series.values; % K
         To(5) = simlog.E4.pipe_model.B.T.series.values; % K
         mdot_pipe(5) = simlog.E4.pipe_model.mdot_A.series.values;
 
-        Pi(6) = simlog.E5.pipe_model.A.p.series.values* 1e5; % Pa
-        Po(6) = simlog.E5.pipe_model.B.p.series.values* 1e5; % Pa
+        Pi(6) = simlog.E5.pipe_model.A.p.series.values* 1e6; % Pa
+        Po(6) = simlog.E5.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(6) = simlog.E5.pipe_model.A.T.series.values; % K
         To(6) = simlog.E5.pipe_model.B.T.series.values; % K
         mdot_pipe(6) = simlog.E5.pipe_model.mdot_A.series.values;
 
-        Pi(7) = simlog.E6.pipe_model.A.p.series.values* 1e5; % Pa
-        Po(7) = simlog.E6.pipe_model.B.p.series.values* 1e5; % Pa
+        Pi(7) = simlog.E6.pipe_model.A.p.series.values* 1e6; % Pa
+        Po(7) = simlog.E6.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(7) = simlog.E6.pipe_model.A.T.series.values; % K
         To(7) = simlog.E6.pipe_model.B.T.series.values; % K
         mdot_pipe(7) = simlog.E6.pipe_model.mdot_A.series.values;
 
-        Pi(8) = simlog.E7.pipe_model.A.p.series.values* 1e5; % Pa
-        Po(8) = simlog.E7.pipe_model.B.p.series.values* 1e5; % Pa
+        Pi(8) = simlog.E7.pipe_model.A.p.series.values* 1e6; % Pa
+        Po(8) = simlog.E7.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(8) = simlog.E7.pipe_model.A.T.series.values; % K
         To(8) = simlog.E7.pipe_model.B.T.series.values; % K
         mdot_pipe(8) = simlog.E7.pipe_model.mdot_A.series.values;
