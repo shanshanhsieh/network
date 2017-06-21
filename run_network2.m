@@ -1,6 +1,7 @@
 clear all;
 % All the parameters besides the internal diameter are defined inside the
 T_initial = 350; %K
+Cpw = 4.184; %kJ/kgK
 
 
 % production plant
@@ -49,6 +50,7 @@ end
 
 
 T_node_supply = zeros(8760,size(node_mass_flow,2));
+q_loss_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 for t=1:8760
     TUpstream = T_Upstream_array{t};
@@ -130,6 +132,15 @@ for t=1:8760
         dT(6) = Ti(6)-To(6);
         dT(7) = Ti(7)-To(7);
         dT(8) = Ti(8)-To(8);
+        
+        q_loss(1) = mdot_pipe(1) * Cpw * dT(1);
+        q_loss(2) = mdot_pipe(2) * Cpw * dT(2);
+        q_loss(3) = mdot_pipe(3) * Cpw * dT(3);
+        q_loss(4) = mdot_pipe(4) * Cpw * dT(4);   
+        q_loss(5) = mdot_pipe(5) * Cpw * dT(5);
+        q_loss(6) = mdot_pipe(6) * Cpw * dT(6);
+        q_loss(7) = mdot_pipe(7) * Cpw * dT(7);  
+        q_loss(8) = mdot_pipe(8) * Cpw * dT(8);
 
         T_node(1) = simlog.N0.A.T.series.values; % K
         T_node(2) = simlog.N1.A.T.series.values; % K
@@ -158,14 +169,17 @@ for t=1:8760
         'VariableNames', {'Di' 'Do' 'mdot_pipe' 'Pi' 'Po' 'dP' 'Ti' 'To' 'dT'});
 
         T_node_supply(t,:) = vec2mat(T_node,size(T_node_supply,2));
+        q_loss_supply(t,:) = vec2mat(q_loss,size(q_loss_supply,2));
         dP_supply(t) = sum(dP);
     else
         T_node_supply(t,:) = str2double(T_supply(t+1,:));
+        q_loss_supply(t,:) = 0;
         dP_supply(t) = 0;
     end
 end
 %writetable(T, 'network2_results.csv')
 csvwrite('network2_T_node_supply.csv', T_node_supply)
+csvwrite('network2_qloss_supply.csv', q_loss_supply)
 csvwrite('network2_dP_supply.csv', dP_supply)
 
 
