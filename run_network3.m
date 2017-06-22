@@ -53,7 +53,8 @@ end
 T_node_supply = zeros(8760,size(node_mass_flow,2));
 q_loss_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
-for t = 5:12
+load_system('pipelines_network3');
+for t = 1:8760
     TUpstream = T_Upstream_array{t};
     TDownstream = 60 + 273.15; 
     if isnumeric(TUpstream)
@@ -63,7 +64,7 @@ for t = 5:12
         end
 
         % Initialization
-        load_system('pipelines_network3');
+        %load_system('pipelines_network3');
         sim('pipelines_network3');
         % simlog.print  
 
