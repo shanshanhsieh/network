@@ -7,7 +7,7 @@ Cpw = 4.184; %kJ/kgK
 % production plant
 % TUpstream = 338.3564; % Plant Supply temperature (K)
 % TDownstream = 60 + 273.15; 
-PUpstream = 1.01325*3; % bar
+PUpstream = 1.01325*4; % bar
 
 % Soil properties
 kSoil = 1.6;   % (W/mK)
@@ -57,6 +57,8 @@ end
 T_node_supply = zeros(8760,size(node_mass_flow,2));
 q_loss_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
+load_system('pipelines_network1');
+
 for t=1:8760
     TUpstream = T_Upstream_array{t};
     TDownstream = 60 + 273.15; 
@@ -66,9 +68,7 @@ for t=1:8760
             mdot(j) = node_mass_flow(t,j); % mass flow rate {kg/s)
         end
 
-
         % Initialization
-        load_system('pipelines_network1');
         sim('pipelines_network1');
         % simlog.print  
 

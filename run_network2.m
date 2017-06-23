@@ -6,7 +6,7 @@ Cpw = 4.184; %kJ/kgK
 
 % production plant
 plant_node = [1,7];
-PUpstream = 1.01325*4; % bar
+PUpstream = 1.01325*5; % bar
 [num,text,T_supply] = xlsread('network2_input.xlsx','T_Supply_DH');
 T_Upstream_array = T_supply(2:end,plant_node(1));
 
