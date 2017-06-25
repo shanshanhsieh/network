@@ -4,7 +4,10 @@ T_initial = 350; %K
 Cpw = 4.184; %kJ/kgK
 
 
-% production plant
+% production plant 
+
+
+
 plant_node = [1,7];
 PUpstream = 1.01325*5; % bar
 [num,text,T_supply] = xlsread('network2_input.xlsx','T_Supply_DH');
@@ -52,6 +55,7 @@ end
 T_node_supply = zeros(8760,size(node_mass_flow,2));
 q_loss_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
+load_system('pipelines_network2');
 for t=1:8760
     TUpstream = T_Upstream_array{t};
     TDownstream = 60 + 273.15; 
@@ -62,7 +66,7 @@ for t=1:8760
         end
 
         % Initialization
-        load_system('pipelines_network2');
+        % load_system('pipelines_network2');
         sim('pipelines_network2');
         % simlog.print  
 
