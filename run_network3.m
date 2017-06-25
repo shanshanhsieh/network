@@ -1,17 +1,16 @@
 clear all;
-% All the parameters besides the internal diameter are defined inside the
-T_initial = 350; %K
+% All the parameters besides the internal diameter are defined inside th
 Cpw = 4.184; %kJ/kgK
 
 % production plant
 plant_node = 1;
-PUpstream = 0.101325*4; % MPa
+PUpstream = 0.101325*7 ; % MPa
 [num,text,T_supply] = xlsread('network3_input.xlsx','T_Supply_DH');
 T_Upstream_array = T_supply(2:end,plant_node(1));
 
 % Soil properties
 kSoil = 1.6;   % (W/mK)
-TSoil = 283;    % Soil temperature (K)
+TSoil = 283;    % Soil temperature (K) 
 z = 2;        % Soil thickness (m)
 
 % pipe model
@@ -54,8 +53,9 @@ T_node_supply = zeros(8760,size(node_mass_flow,2));
 q_loss_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 load_system('pipelines_network3');
-for t = 1:8760
+for t = 1:300
     TUpstream = T_Upstream_array{t};
+    T_initial = T_Upstream_array{t}; %K
     TDownstream = 60 + 273.15; 
     if isnumeric(TUpstream)
         mdot = zeros(1,size(node_mass_flow,2));  
@@ -68,7 +68,7 @@ for t = 1:8760
         sim('pipelines_network3');
         % simlog.print  
 
-        % Retrieve values from the Simscape data logging
+        % Retrieve values from the Simscape data lo gging
         Pi(1) = simlog.E0.pipe_model.A.p.series.values* 1e6; % Pa
         Po(1) = simlog.E0.pipe_model.B.p.series.values* 1e6; % Pa
         Ti(1) = simlog.E0.pipe_model.A.T.series.values; % K
