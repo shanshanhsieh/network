@@ -1,6 +1,5 @@
 clear all;
 % All the parameters besides the internal diameter are defined inside the
-T_initial = 350; %K
 Cpw = 4.184; %kJ/kgK
 
 
@@ -58,7 +57,8 @@ dP_supply = zeros(8760,1);
 load_system('pipelines_network2');
 for t=1:8760
     TUpstream = T_Upstream_array{t};
-    TDownstream = 60 + 273.15; 
+    T_initial = T_Upstream_array{t};
+    TDownstream = T_Upstream_array{t}-0.05; 
     if isnumeric(TUpstream)
         mdot = zeros(1,size(node_mass_flow,2));  
         for j = 1:size(node_mass_flow,2)
@@ -155,7 +155,56 @@ for t=1:8760
         T_node(7) = simlog.N6.A.T.series.values; % K
         T_node(8) = simlog.N7.A.T.series.values; % K
         T_node(9) = simlog.N8.A.T.series.values; % K
-
+        
+        Phi_W(1) = simlog.E0.pipe_model.Phi_W.series.values;
+        Phi_W(2) = simlog.E1.pipe_model.Phi_W.series.values;
+        Phi_W(3) = simlog.E2.pipe_model.Phi_W.series.values;
+        Phi_W(4) = simlog.E3.pipe_model.Phi_W.series.values;
+        Phi_W(5) = simlog.E4.pipe_model.Phi_W.series.values;
+        Phi_W(6) = simlog.E5.pipe_model.Phi_W.series.values;
+        Phi_W(7) = simlog.E6.pipe_model.Phi_W.series.values;
+        Phi_W(8) = simlog.E7.pipe_model.Phi_W.series.values;
+        
+        T_wall(1) = simlog.E0.pipe_model.W.T.series.values;
+        T_wall(2) = simlog.E1.pipe_model.W.T.series.values;
+        T_wall(3) = simlog.E2.pipe_model.W.T.series.values;
+        T_wall(4) = simlog.E3.pipe_model.W.T.series.values;
+        T_wall(5) = simlog.E4.pipe_model.W.T.series.values;
+        T_wall(6) = simlog.E5.pipe_model.W.T.series.values;
+        T_wall(7) = simlog.E6.pipe_model.W.T.series.values;
+        T_wall(8) = simlog.E7.pipe_model.W.T.series.values;
+        
+        
+        T_fluid(1) = simlog.E0.pipe_model.T.series.values;
+        T_fluid(2) = simlog.E1.pipe_model.T.series.values;
+        T_fluid(3) = simlog.E2.pipe_model.T.series.values;
+        T_fluid(4) = simlog.E3.pipe_model.T.series.values;
+        T_fluid(5) = simlog.E4.pipe_model.T.series.values;
+        T_fluid(6) = simlog.E5.pipe_model.T.series.values;
+        T_fluid(7) = simlog.E6.pipe_model.T.series.values;
+        T_fluid(8) = simlog.E7.pipe_model.T.series.values;
+        
+        k_fluid(1) = simlog.E0.pipe_model.k.series.values;
+        k_fluid(2) = simlog.E1.pipe_model.k.series.values;
+        k_fluid(3) = simlog.E2.pipe_model.k.series.values;
+        k_fluid(4) = simlog.E3.pipe_model.k.series.values;
+        k_fluid(5) = simlog.E4.pipe_model.k.series.values;
+        k_fluid(6) = simlog.E5.pipe_model.k.series.values;
+        k_fluid(7) = simlog.E6.pipe_model.k.series.values;
+        k_fluid(8) = simlog.E7.pipe_model.k.series.values;
+        
+        nu_fluid(1) = simlog.E0.pipe_model.nu.series.values;
+        nu_fluid(2) = simlog.E1.pipe_model.nu.series.values;
+        nu_fluid(3) = simlog.E2.pipe_model.nu.series.values;
+        nu_fluid(4) = simlog.E3.pipe_model.nu.series.values;
+        nu_fluid(5) = simlog.E4.pipe_model.nu.series.values;
+        nu_fluid(6) = simlog.E5.pipe_model.nu.series.values;
+        nu_fluid(7) = simlog.E6.pipe_model.nu.series.values;
+        nu_fluid(8) = simlog.E7.pipe_model.nu.series.values;
+        
+        
+        
+        
         % E = {'E0', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7'};
         % Pi = zeros(1,size(edge,1));
         % Po = zeros(1,size(edge,1));
