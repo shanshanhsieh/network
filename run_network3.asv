@@ -53,10 +53,10 @@ T_node_supply = zeros(8760,size(node_mass_flow,2));
 q_loss_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 load_system('pipelines_network3');
-for t = 1:8760  
+for t = 1:5000
     TUpstream = T_Upstream_array{t};
     T_initial = T_Upstream_array{t}; %K
-    TDownstream = T_Upstream_array{t}-0.05; 
+    TDownstream = T_Upstream_array{t}; 
     if isnumeric(TUpstream)
         mdot = zeros(1,size(node_mass_flow,2));  
         for j = 1:size(node_mass_flow,2)
