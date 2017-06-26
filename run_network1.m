@@ -1,6 +1,5 @@
 clear all;
 % All the parameters besides the internal diameter are defined inside the
-T_initial = 350; %K
 Cpw = 4.184; %kJ/kgK
 
 
@@ -61,7 +60,8 @@ load_system('pipelines_network1');
 
 for t=1:8760
     TUpstream = T_Upstream_array{t};
-    TDownstream = 60 + 273.15; 
+    T_initial = T_Upstream_array{t}; %K
+    TDownstream = T_Upstream_array{t}-0.05; 
     if isnumeric(TUpstream)
         mdot = zeros(1,size(node_mass_flow,2));  
         for j = 1:size(node_mass_flow,2)

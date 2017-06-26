@@ -11,6 +11,7 @@ plant_node = [1,7];
 PUpstream = 1.01325*5; % bar
 [num,text,T_supply] = xlsread('network2_input.xlsx','T_Supply_DH');
 T_Upstream_array = T_supply(2:end,plant_node(1));
+T_nodes_array = T_supply(2:end);
 
 % Soil properties
 kSoil = 1.6;   % (W/mK)
@@ -55,10 +56,10 @@ T_node_supply = zeros(8760,size(node_mass_flow,2));
 q_loss_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 load_system('pipelines_network2');
-for t=1:8760
+for t=1:3000
     TUpstream = T_Upstream_array{t};
-    T_initial = T_Upstream_array{t};
-    TDownstream = T_Upstream_array{t}-0.05; 
+    T_initial = min([T_supply{t+1,:}]);
+    TDownstream = mean([T_supply{t+1,:}]); 
     if isnumeric(TUpstream)
         mdot = zeros(1,size(node_mass_flow,2));  
         for j = 1:size(node_mass_flow,2)
@@ -67,6 +68,11 @@ for t=1:8760
 
         % Initialization
         % load_system('pipelines_network2');
+        max_T_diff = peak2peak([T_supply{t+1,:}]);
+        if  max_T_diff > 10
+            set_param('pipelines_network2','StopTime','30000')
+        else set_param('pipelines_network2','StopTime','3000')
+        end
         sim('pipelines_network2');
         % simlog.print  
 
