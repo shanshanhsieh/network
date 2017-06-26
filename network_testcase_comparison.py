@@ -8,12 +8,12 @@ from math import *
 import os
 import matplotlib.pyplot as plt
 
-network = 'network1'
+network = 'network3'
 network_type = 'DH'
 time_start = 0
-time_end = 8760
+time_end = 999
 
-path_to_matlab = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network\network1_DH')
+path_to_matlab = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network')
 simulink_network_qloss = pd.read_csv(os.path.join(path_to_matlab,'%s_qloss_supply.csv' %network))
 simulink_network_dP = pd.read_csv(os.path.join(path_to_matlab, '%s_dP_supply.csv' %network), header= None)
 path_to_cea = os.path.abspath(r'C:\reference-case-open\baseline\outputs\data\optimization\network\layout')
