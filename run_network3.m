@@ -53,7 +53,7 @@ T_node_supply = zeros(8760,size(node_mass_flow,2));
 q_loss_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 load_system('pipelines_network3');
-for t = 1:1000   
+for t = 250   
     TUpstream = T_Upstream_array{t};
     if isnumeric(TUpstream)
         T_supply_t = T_supply(t+1,:);
@@ -74,7 +74,7 @@ for t = 1:1000
         max_T_diff = peak2peak(T_supply_t);
         if max_T_diff > 10
             set_param('pipelines_network3', 'StopTime', '30000');
-        else set_param('pipelines_network3', 'StopTime', '3000');
+        else set_param('pipelines_network3', 'StopTime', '30000');
         end
 
         % Initialization
