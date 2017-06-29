@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 network = 'network3'
 network_type = 'DH'
-time_start = 0
+time_start = 8000
 time_end = 8760
 
 #  path_to_matlab = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network')
