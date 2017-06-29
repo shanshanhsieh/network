@@ -58,7 +58,7 @@ Nu_A_supply = zeros(8760,size(edge,1));
 Nu_B_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 load_system('pipelines_network3');
-for t = 1:4000 
+for t = 1:8760  
     TUpstream = T_Upstream_array{t};
     if isnumeric(TUpstream)
         T_supply_t = T_supply(t+1,:);
@@ -163,14 +163,14 @@ for t = 1:4000
         q_loss(7) = mdot_pipe(7) * Cpw * dT(7);  
         q_loss(8) = mdot_pipe(8) * Cpw * dT(8);
         
-        Phi_W(1) = simlog.E0.pipe_model.Q_H.series.values;
-        Phi_W(2) = simlog.E1.pipe_model.Q_H.series.values;
-        Phi_W(3) = simlog.E2.pipe_model.Q_H.series.values;
-        Phi_W(4) = simlog.E3.pipe_model.Q_H.series.values;
-        Phi_W(5) = simlog.E4.pipe_model.Q_H.series.values;
-        Phi_W(6) = simlog.E5.pipe_model.Q_H.series.values;
-        Phi_W(7) = simlog.E6.pipe_model.Q_H.series.values;
-        Phi_W(8) = simlog.E7.pipe_model.Q_H.series.values;
+        Phi_W(1) = simlog.E0.pipe_model.Q_H.series.values*(-1);
+        Phi_W(2) = simlog.E1.pipe_model.Q_H.series.values*(-1);
+        Phi_W(3) = simlog.E2.pipe_model.Q_H.series.values*(-1);
+        Phi_W(4) = simlog.E3.pipe_model.Q_H.series.values*(-1);
+        Phi_W(5) = simlog.E4.pipe_model.Q_H.series.values*(-1);
+        Phi_W(6) = simlog.E5.pipe_model.Q_H.series.values*(-1);
+        Phi_W(7) = simlog.E6.pipe_model.Q_H.series.values*(-1);
+        Phi_W(8) = simlog.E7.pipe_model.Q_H.series.values*(-1);
         
         Phi_A(1) = simlog.E0.pipe_model.Phi_A.series.values;
         Phi_A(2) = simlog.E1.pipe_model.Phi_A.series.values;

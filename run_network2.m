@@ -199,14 +199,7 @@ for t=1:3000
         k_fluid(7) = simlog.E6.pipe_model.k.series.values;
         k_fluid(8) = simlog.E7.pipe_model.k.series.values;
         
-        nu_fluid(1) = simlog.E0.pipe_model.nu.series.values;
-        nu_fluid(2) = simlog.E1.pipe_model.nu.series.values;
-        nu_fluid(3) = simlog.E2.pipe_model.nu.series.values;
-        nu_fluid(4) = simlog.E3.pipe_model.nu.series.values;
-        nu_fluid(5) = simlog.E4.pipe_model.nu.series.values;
-        nu_fluid(6) = simlog.E5.pipe_model.nu.series.values;
-        nu_fluid(7) = simlog.E6.pipe_model.nu.series.values;
-        nu_fluid(8) = simlog.E7.pipe_model.nu.series.values;
+ 
         
         
         
