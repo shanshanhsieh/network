@@ -4,9 +4,10 @@ Cpw = 4.184; %kJ/kgK
 
 
 % production plant
-% TUpstream = 338.3564; % Plant Supply temperature (K)
-% TDownstream = 60 + 273.15; 
+plant_node = 6;
+[num,text,T_supply] = xlsread('network1_input.xlsx','T_Supply_DH');
 PUpstream = 1.01325*4; % bar
+T_Upstream_array = T_supply(2:end,plant_node(1));
 
 % Soil properties
 kSoil = 1.6;   % (W/mK)
@@ -18,12 +19,6 @@ length = 125;  % Length (m)
 pipe_roughness = 2e-5; % steel pipe roughness (m)
 kInsulant = 0.023; % (W/mK)
 %rho0 = 998;  %water density
-
-% production plant
-plant_node = 6;
-[num,text,T_supply] = xlsread('network1_input.xlsx','T_Supply_DH');
-T_Upstream_array = T_supply(2:end,plant_node(1));
-
 
 % Read pipe properties and substation flow rates
 edge = xlsread('network1_input.xlsx','Edge_DH');     % pipe properties
@@ -55,6 +50,13 @@ end
 
 T_node_supply = zeros(8760,size(node_mass_flow,2));
 q_loss_supply = zeros(8760,size(edge,1));
+Phi_W_supply = zeros(8760,size(edge,1));
+Phi_A_supply = zeros(8760,size(edge,1));
+Phi_B_supply = zeros(8760,size(edge,1));
+k_supply = zeros(8760,size(edge,1));
+%nu_supply = zeros(8760,size(edge,1));
+F_A_supply = zeros(8760,size(edge,1));
+F_B_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 load_system('pipelines_network1');
 
@@ -69,6 +71,11 @@ for t=1:8760
         end
 
         % Initialization
+        max_T_diff = peak2peak([T_supply{t+1,:}]);
+        if  max_T_diff > 10
+            set_param('pipelines_network2','StopTime','30000')
+        else set_param('pipelines_network2','StopTime','8000')
+        end
         sim('pipelines_network1');
         % simlog.print  
 

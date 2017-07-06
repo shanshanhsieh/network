@@ -8,7 +8,6 @@ plant_node = [1,7];
 PUpstream = 1.01325*5; % bar
 [num,text,T_supply] = xlsread('network2_input.xlsx','T_Supply_DH');
 T_Upstream_array = T_supply(2:end,plant_node(1));
-T_nodes_array = T_supply(2:end);
 
 % Soil properties
 kSoil = 1.6;   % (W/mK)
@@ -55,12 +54,12 @@ Phi_W_supply = zeros(8760,size(edge,1));
 Phi_A_supply = zeros(8760,size(edge,1));
 Phi_B_supply = zeros(8760,size(edge,1));
 k_supply = zeros(8760,size(edge,1));
-nu_supply = zeros(8760,size(edge,1));
+%nu_supply = zeros(8760,size(edge,1));
 F_A_supply = zeros(8760,size(edge,1));
 F_B_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 load_system('pipelines_network2');
-for t=1:8760  
+for t=1:8664 
     TUpstream = T_Upstream_array{t};
     T_initial = min([T_supply{t+1,:}]);
     TDownstream = mean([T_supply{t+1,:}]); 
@@ -266,7 +265,7 @@ for t=1:8760
         Phi_A_supply(t,:) = vec2mat(Phi_A,size(Phi_A_supply,2));
         Phi_B_supply(t,:) = vec2mat(Phi_B,size(Phi_B_supply,2));
         k_supply(t,:) = vec2mat(k_fluid,size(Phi_A_supply,2));
-        nu_supply(t,:) = vec2mat(nu_fluid,size(nu_supply,2));
+        %nu_supply(t,:) = vec2mat(nu_fluid,size(nu_supply,2));
         F_A_supply(t,:) = vec2mat(viscous_friction_A,size(F_A_supply,2));
         F_B_supply(t,:) = vec2mat(viscous_friction_B,size(F_B_supply,2));
         dP_supply(t) = sum(dP);
@@ -277,7 +276,7 @@ for t=1:8760
         Phi_A_supply(t,:) = 0;
         Phi_B_supply(t,:) = 0;
         k_supply(t,:) = 0;
-        nu_supply(t,:) = 0;
+        %nu_supply(t,:) = 0;
         F_A_supply(t,:) = 0;
         F_B_supply(t,:) = 0;
         dP_supply(t) = 0;
@@ -290,7 +289,7 @@ csvwrite('network2_Phi_W_supply.csv', Phi_W_supply)
 csvwrite('network2_Phi_A_supply.csv', Phi_A_supply)
 csvwrite('network2_Phi_B_supply.csv', Phi_B_supply)
 csvwrite('network2_k_supply.csv', k_supply)
-csvwrite('network2_nu_supply.csv', nu_supply)
+%csvwrite('network2_nu_supply.csv', nu_supply)
 csvwrite('network2_F_A_supply.csv', F_A_supply)
 csvwrite('network2_F_B_supply.csv', F_B_supply)
 csvwrite('network2_dP_supply.csv', dP_supply)
