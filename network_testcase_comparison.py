@@ -8,21 +8,22 @@ from math import *
 import os
 import matplotlib.pyplot as plt
 
-network = 'network3'
+network = 'network2'
 network_type = 'DH'
-time_start = 8000
-time_end = 8760
+time_start = 0
+time_end = 8600
 
-#  path_to_matlab = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network')
-path_to_matlab = os.path.abspath(r'C:\Users\Shanshan\Documents\GitHub\network\network3_DH')
+path_to_matlab = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network\network2_DH_parts')
+#path_to_matlab = os.path.abspath(r'C:\Users\Shanshan\Documents\GitHub\network\network2_DH_parts')
 # simulink_network_qloss = pd.read_csv(os.path.join(path_to_matlab,'%s_qloss_supply.csv' %network))
-simulink_network_qloss = pd.read_csv(os.path.join(path_to_matlab,'%s_Phi_W.csv' %network))
-simulink_network_Phi_A = pd.read_csv(os.path.join(path_to_matlab,'%s_Phi_A.csv' %network))
+simulink_network_qloss = pd.read_csv(os.path.join(path_to_matlab,'%s_Phi_W_supply.csv' %network))
+# simulink_network_Phi_A = pd.read_csv(os.path.join(path_to_matlab,'%s_Phi_A.csv' %network))
 simulink_network_dP = pd.read_csv(os.path.join(path_to_matlab, '%s_dP_supply.csv' %network), header= None)
 
 
 # path_to_cea = os.path.abspath(r'C:\reference-case-open\baseline\outputs\data\optimization\network\layout')
-path_to_cea = os.path.abspath(r'C:\Users\Shanshan\Documents\GitHub\network\cea')
+# path_to_cea = os.path.abspath(r'C:\Users\Shanshan\Documents\GitHub\network\cea')
+path_to_cea = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network\cea')
 cea_network_name = network + '_' + network_type
 cea_network = os.path.join(path_to_cea, cea_network_name)
 cea_network_qloss = pd.read_csv(os.path.join(cea_network, '%s_qloss_Supply.csv' %network_type))
@@ -30,7 +31,7 @@ cea_network_dP = pd.read_csv(os.path.join(cea_network, '%s_P_DeltaP.csv' %networ
 
 delta_qloss = cea_network_qloss.sub(simulink_network_qloss)
 percent_d_qloss = delta_qloss.div(simulink_network_qloss)
-percent_Phi_loss = simulink_network_qloss.div(simulink_network_Phi_A)
+# percent_Phi_loss = simulink_network_qloss.div(simulink_network_Phi_A)
 
 # delta_ploss = cea_network_dP.sub(simulink_network_dP, axis=0)
 delta_ploss = simulink_network_dP.sub(cea_network_dP, axis=0)
