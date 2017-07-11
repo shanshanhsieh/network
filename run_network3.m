@@ -58,7 +58,7 @@ Nu_A_supply = zeros(8760,size(edge,1));
 Nu_B_supply = zeros(8760,size(edge,1));
 dP_supply = zeros(8760,1);
 load_system('pipelines_network3');
-for t = 1:8760  
+for t = 10:12 
     TUpstream = T_Upstream_array{t};
     if isnumeric(TUpstream)
         T_supply_t = T_supply(t+1,:);

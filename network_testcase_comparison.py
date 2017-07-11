@@ -11,10 +11,10 @@ import matplotlib.pyplot as plt
 network = 'network2'
 network_type = 'DH'
 time_start = 0
-time_end = 8600
+time_end = 8760
 
-path_to_matlab = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network\network2_DH_parts')
-#path_to_matlab = os.path.abspath(r'C:\Users\Shanshan\Documents\GitHub\network\network2_DH_parts')
+# path_to_matlab = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network\network2_DH_parts')
+path_to_matlab = os.path.abspath(r'C:\Users\Shanshan\Documents\GitHub\network\network2_DH_new')
 # simulink_network_qloss = pd.read_csv(os.path.join(path_to_matlab,'%s_qloss_supply.csv' %network))
 simulink_network_qloss = pd.read_csv(os.path.join(path_to_matlab,'%s_Phi_W_supply.csv' %network))
 # simulink_network_Phi_A = pd.read_csv(os.path.join(path_to_matlab,'%s_Phi_A.csv' %network))
@@ -22,20 +22,20 @@ simulink_network_dP = pd.read_csv(os.path.join(path_to_matlab, '%s_dP_supply.csv
 
 
 # path_to_cea = os.path.abspath(r'C:\reference-case-open\baseline\outputs\data\optimization\network\layout')
-# path_to_cea = os.path.abspath(r'C:\Users\Shanshan\Documents\GitHub\network\cea')
-path_to_cea = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network\cea')
+path_to_cea = os.path.abspath(r'C:\Users\Shanshan\Documents\GitHub\network\cea')
+# path_to_cea = os.path.abspath(r'C:\Users\fcl2\Documents\MATLAB\network\cea')
 cea_network_name = network + '_' + network_type
 cea_network = os.path.join(path_to_cea, cea_network_name)
 cea_network_qloss = pd.read_csv(os.path.join(cea_network, '%s_qloss_Supply.csv' %network_type))
 cea_network_dP = pd.read_csv(os.path.join(cea_network, '%s_P_DeltaP.csv' %network_type))['pressure_loss_supply_Pa']
 
 delta_qloss = cea_network_qloss.sub(simulink_network_qloss)
-percent_d_qloss = delta_qloss.div(simulink_network_qloss)
+percent_d_qloss = delta_qloss.div(simulink_network_qloss)*100
 # percent_Phi_loss = simulink_network_qloss.div(simulink_network_Phi_A)
 
 # delta_ploss = cea_network_dP.sub(simulink_network_dP, axis=0)
 delta_ploss = simulink_network_dP.sub(cea_network_dP, axis=0)
-percent_d_ploss = delta_ploss.div(simulink_network_dP)
+percent_d_ploss = delta_ploss.div(simulink_network_dP)*100
 
 # diff_max_qloss = pd.DataFrame(index=cea_network_qloss.columns, columns=['max_cea_qloss [kW]', 'max_simulink_qloss [kW]', 'diff [%]'])
 # for edge in range(cea_network_qloss.shape[1]):
@@ -67,9 +67,13 @@ fig_ploss, (ax1, ax2) = plt.subplots(2, sharex=True)
 line1, = ax1.plot(x, cea_network_dP[time_start:time_end], label='cea')
 line2, = ax1.plot(x, simulink_network_dP[time_start:time_end], label='simulink')
 ax1.legend(loc='lower right')
+ax1.set_ylabel('Pa')
+
 
 line3, = ax2.plot(x, percent_d_ploss[time_start:time_end], label='d_ploss')
 ax2.legend(loc='lower right')
+ax2.set_ylim((-20,20))
+ax2.set_ylabel('[%]')
 
 fig_ploss.savefig('%s_ploss' %network)
 
@@ -86,6 +90,7 @@ for edge in range(simulink_network_qloss.shape[1]):
         #axs[edge].legend(loc='lower right')
         axs[edge].set_title(column)
         axs[edge].legend(loc='lower right')
+        axs[edge].set_ylabel('[kWh]')
 
 figs_qloss.savefig('%s_qloss' %network)
 
@@ -99,6 +104,8 @@ for edge in range(simulink_network_qloss.shape[1]):
         line5, = axs_1[edge].plot(x, percent_d_qloss[time_start:time_end][column])
         #axs[edge].legend(loc='lower right')
         axs_1[edge].set_title(column)
+        axs_1[edge].set_ylim((0,100))
+        axs_1[edge].set_ylabel('[%]')
 
 figs_qloss_1.savefig('%s_qloss_comparison' %network)
 
